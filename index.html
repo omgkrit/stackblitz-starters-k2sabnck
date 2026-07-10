@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Micro Facts Trainer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+<h1>🧠 Micro Facts Trainer</h1>
+
+<div class="controls">
+
+<label>
+Multiplier
+<input id="minMultiplier" type="number" value="4">
+-
+<input id="maxMultiplier" type="number" value="9">
+</label>
+
+<div id="ranges"></div>
+
+<button id="startBtn">
+Start Training
+</button>
+
+</div>
+
+<div id="question">
+Press Start
+</div>
+
+<input
+id="answer"
+type="number"
+placeholder="Answer">
+
+<div class="stats">
+
+<div id="accuracy">Accuracy: 0%</div>
+
+<div id="average">Average: 0.00 s</div>
+
+<div id="streak">Streak: 0</div>
+
+</div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
