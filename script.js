@@ -1,3 +1,4 @@
+console.log("UPDATED VERSION");
 const ranges = [
   [13, 19],
   [21, 29],
@@ -28,6 +29,7 @@ let streak = 0;
 let totalTime = 0;
 let startTime = 0;
 let wrongQueue = [];
+let feedbackTimer;
 
 function rand(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -50,11 +52,19 @@ function nextQuestion() {
     const selected = getSelectedRanges();
     const r = selected[rand(0, selected.length - 1)];
 
-    a = rand(r[0], r[1]);
-    b = rand(
-      Number(document.getElementById("minMultiplier").value),
-      Number(document.getElementById("maxMultiplier").value)
-    );
+    let big = rand(r[0], r[1]);
+    let small = rand(
+    Number(document.getElementById("minMultiplier").value),
+    Number(document.getElementById("maxMultiplier").value)
+);
+
+if (Math.random() < 0.5) {
+  a = big;
+  b = small;
+} else {
+  a = small;
+  b = big;
+}
   }
 
   document.getElementById("question").textContent = `${a} × ${b}`;
@@ -98,16 +108,28 @@ document.getElementById("answer").addEventListener("keydown", (e) => {
 
   total++;
 
-  if (Number(e.target.value) === a * b) {
+  const isCorrect = Number(e.target.value) === a * b;
+
+  if (isCorrect) {
     correct++;
     streak++;
     totalTime += t;
+
+    updateStats(t);
+    nextQuestion();
+
   } else {
     streak = 0;
     wrongQueue.push({ a, b });
-    alert(`❌ คำตอบคือ ${a * b}`);
-  }
 
-  updateStats(t);
-  nextQuestion();
+    const feedback = document.getElementById("feedback");
+    feedback.textContent = `❌ คำตอบคือ ${a * b}`;
+
+    updateStats(t);
+
+    setTimeout(() => {
+      feedback.textContent = "";
+      nextQuestion();
+    }, 1000);
+  }
 });
