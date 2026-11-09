@@ -1,0 +1,149 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #121212;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  width: 90%;
+  max-width: 700px;
+  margin: auto;
+  padding: 30px 0;
+}
+
+h1 {
+  text-align: center;
+}
+
+.controls {
+  background: #1d1d1d;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.controls input {
+  width: 65px;
+  padding: 8px;
+  font-size: 18px;
+}
+
+#ranges {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 15px 0;
+}
+
+#ranges label {
+  background: #292929;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#startBtn {
+  width: 100%;
+  padding: 15px;
+  font-size: 20px;
+  background: #2878d0;
+  color: white;
+}
+
+#question {
+  text-align: center;
+  font-size: 60px;
+  margin: 40px 0;
+  font-weight: bold;
+}
+
+#feedback {
+  min-height: 30px;
+  margin: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+#answer {
+  display: block;
+  width: 100%;
+  font-size: 40px;
+  padding: 15px;
+  text-align: center;
+  background: #252525;
+  color: white;
+  border: 2px solid #444;
+  border-radius: 12px;
+}
+
+/* Number Pad */
+
+#numpad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 420px;
+  margin: 20px auto;
+}
+
+.num-btn {
+  height: 82px;
+  font-size: 32px;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(180deg, #383838, #252525);
+  border: 1px solid #484848;
+  border-bottom: 5px solid #171717;
+  border-radius: 14px;
+  box-shadow: 0 4px 8px #0006;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.num-btn:active {
+  transform: translateY(3px);
+  border-bottom-width: 2px;
+  box-shadow: 0 1px 3px #0006;
+}
+
+.delete-btn {
+  background: linear-gradient(180deg, #a83d3d, #752626);
+  border-bottom-color: #501818;
+}
+
+.enter-btn {
+  background: linear-gradient(180deg, #25a965, #147441);
+  border-bottom-color: #0b4d2a;
+}
+
+@media (max-width: 500px) {
+  #numpad {
+    gap: 10px;
+  }
+
+  .num-btn {
+    height: 75px;
+    font-size: 30px;
+  }
+}
+#divisionFacts {
+  min-height: 64px;
+  margin: 0 0 12px;
+  text-align: center;
+  font-size: 22px;
+  color: #8fd3ff;
+  line-height: 1.4;
+}

@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Micro Facts Trainer</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="a-math-icon-512.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Micro Facts">
+</head>
+<body>
+
+<div class="container">
+
+  <h1>🧠 Micro Facts Trainer</h1>
+
+  <div class="controls">
+
+    <label>
+      Multiplier
+      <input id="minMultiplier" type="number" value="4">
+      -
+      <input id="maxMultiplier" type="number" value="9">
+    </label>
+
+    <div id="ranges"></div>
+
+    <button id="startBtn">Start Training</button>
+
+  </div>
+
+  <div id="question">Press Start</div>
+
+  <div id="feedback"></div>
+
+  <input
+    id="answer"
+    type="number"
+    inputmode="numeric"
+    placeholder="Answer"
+    autocomplete="off"
+  >
+
+  <!-- Number Pad -->
+  <div id="numpad">
+
+    <button class="num-btn" data-key="1">1</button>
+    <button class="num-btn" data-key="2">2</button>
+    <button class="num-btn" data-key="3">3</button>
+
+    <button class="num-btn" data-key="4">4</button>
+    <button class="num-btn" data-key="5">5</button>
+    <button class="num-btn" data-key="6">6</button>
+
+    <button class="num-btn" data-key="7">7</button>
+    <button class="num-btn" data-key="8">8</button>
+    <button class="num-btn" data-key="9">9</button>
+
+    <button class="num-btn delete-btn" data-key="backspace">⌫</button>
+    <button class="num-btn" data-key="0">0</button>
+    <button class="num-btn enter-btn" data-key="enter">↵</button>
+
+  </div>
+
+  <div class="stats">
+    <div id="accuracy">Accuracy: 0%</div>
+    <div id="average">Average: 0.00 s</div>
+    <div id="streak">Streak: 0</div>
+  </div>
+
+</div>
+
+<script src="script.js?v=3"></script>
+
+</body>
+</html>
