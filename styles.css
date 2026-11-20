@@ -147,3 +147,57 @@ button {
   color: #8fd3ff;
   line-height: 1.4;
 }
+.nav-btn {
+  display: block;
+  padding: 12px;
+  margin: 0 0 20px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  color: white;
+  background: #333;
+  border-radius: 10px;
+}
+
+/* หน้าสูตรคูณ */
+.table-label {
+  display: block;
+  margin: 8px 0;
+  font-size: 22px;
+}
+
+#result {
+  margin: 20px 0;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 14px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  background: #1d1d1d;
+  border-radius: 10px;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.row .expr {
+  text-align: right;
+}
+
+.row .eq {
+  color: #888;
+}
+
+.row .ans {
+  text-align: left;
+  color: #35cf79;
+}
+
+.msg {
+  text-align: center;
+  color: #ff5555;
+  font-size: 20px;
+}
