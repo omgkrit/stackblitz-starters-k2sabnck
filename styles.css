@@ -61,6 +61,14 @@ button {
   color: white;
 }
 
+#viewPractice #startBtn {
+  margin-top: 12px;
+}
+
+#viewPractice {
+  padding-top: 1px;
+}
+
 #question {
   text-align: center;
   font-size: 60px;
@@ -127,6 +135,17 @@ button {
 .enter-btn {
   background: linear-gradient(180deg, #25a965, #147441);
   border-bottom-color: #0b4d2a;
+}
+
+#submitBtn {
+  display: block;
+  width: 100%;
+  min-height: 58px;
+  margin: 16px 0 12px;
+  padding: 14px 20px;
+  color: white;
+  background: #2878d0;
+  font-size: 22px;
 }
 
 @media (max-width: 500px) {
