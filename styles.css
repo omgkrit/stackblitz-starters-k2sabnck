@@ -201,3 +201,26 @@ button {
   color: #ff5555;
   font-size: 20px;
 }
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 20px 0 0;
+}
+
+.tab-btn {
+  padding: 14px;
+  font-size: 20px;
+  color: #aaa;
+  background: #2a2a2a;
+}
+
+.tab-btn.active {
+  color: white;
+  background: #2878d0;
+}
+
+.hidden {
+  display: none;
+}
