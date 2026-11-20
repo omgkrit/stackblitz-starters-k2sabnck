@@ -499,6 +499,9 @@ button {
 .estimate-choice.correct { background: #176846; }
 .estimate-choice.incorrect { background: #773d44; }
 
+/* Keep mode switching reliable when more specific layout rules define display. */
+.hidden { display: none !important; }
+
 @media (max-width: 760px) {
   .mode-picker { grid-template-columns: 1fr; gap: 8px; }
   .mode-card { min-height: 62px; }

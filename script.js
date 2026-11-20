@@ -37,7 +37,7 @@ function setMode(next) {
   answer.classList.toggle("hidden", mode !== "multiply");
   document.getElementById("numpad").classList.toggle("hidden", mode === "estimate");
   document.querySelector(".answer-panel .keypad-hint").textContent = mode === "factors"
-    ? "แตะช่องเพื่อเลือก แล้วใส่เลขด้วยแป้นด้านล่าง"
+    ? "คลิกช่อง แล้วพิมพ์เลข · Tab สลับช่อง · Enter ส่งคำตอบ"
     : mode === "estimate" ? "เลือกคำตอบที่ใกล้ที่สุด" : "แตะตัวเลข แล้วกด ↵ เพื่อส่งคำตอบ";
   question.innerHTML = '<span class="question-ready-en">Ready?</span><span class="question-ready-th">เริ่มฝึกเมื่อพร้อม</span>';
   feedback.textContent = "";
@@ -84,6 +84,26 @@ function updateFactorSlots() {
   });
 }
 document.querySelectorAll(".factor-slot").forEach(slot => slot.addEventListener("click", () => { activeSlot = Number(slot.dataset.slot); updateFactorSlots(); }));
+document.addEventListener("keydown", event => {
+  if (!active || waiting || mode !== "factors") return;
+  if (/^\d$/.test(event.key)) {
+    event.preventDefault();
+    factorValues[activeSlot] += event.key;
+    updateFactorSlots();
+  } else if (event.key === "Backspace" || event.key === "Delete") {
+    event.preventDefault();
+    factorValues[activeSlot] = factorValues[activeSlot].slice(0, -1);
+    updateFactorSlots();
+  } else if (event.key === "Tab") {
+    event.preventDefault();
+    activeSlot = 1 - activeSlot;
+    updateFactorSlots();
+    document.querySelector(`.factor-slot[data-slot="${activeSlot}"]`).focus();
+  } else if (event.key === "Enter") {
+    event.preventDefault();
+    submitAnswer();
+  }
+});
 
 function renderEstimateOptions() {
   targetEstimate = Math.round((a * b) / 10) * 10;
