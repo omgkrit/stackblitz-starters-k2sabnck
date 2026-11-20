@@ -22,16 +22,21 @@
   <!-- ตั้งค่า: ใช้ร่วมกันทั้งหน้าตารางและหน้าฝึก -->
   <div class="controls">
 
+    <div class="section-heading">
+      <h2>ตั้งค่าโจทย์</h2>
+      <p>เลือกแม่สูตรคูณและช่วงตัวคูณที่ต้องการ</p>
+    </div>
+
     <label class="table-label">
       แม่
-      <input id="tableNum" type="number" inputmode="numeric" value="7">
+      <input id="tableNum" type="number" inputmode="numeric" value="7" aria-label="แม่สูตรคูณ">
     </label>
 
     <label class="table-label">
       ตัวคูณ จาก
-      <input id="fromNum" type="number" inputmode="numeric" value="1">
+      <input id="fromNum" type="number" inputmode="numeric" value="1" aria-label="ตัวคูณเริ่มต้น">
       ถึง
-      <input id="toNum" type="number" inputmode="numeric" value="12">
+      <input id="toNum" type="number" inputmode="numeric" value="12" aria-label="ตัวคูณสิ้นสุด">
     </label>
 
   </div>
@@ -50,18 +55,19 @@
   <!-- มุมมองที่ 2: ฝึก -->
   <div id="viewPractice" class="hidden">
 
-    <button id="startBtn">Start Training</button>
+    <button id="startBtn">เริ่มฝึก</button>
 
-    <div id="question">Press Start</div>
+    <div id="question">กดเริ่มฝึกเพื่อรับโจทย์</div>
 
     <div id="feedback"></div>
     <div id="divisionFacts"></div>
+    <p class="keypad-hint">แตะตัวเลข แล้วกด ↵ เพื่อส่งคำตอบ</p>
 
     <input
       id="answer"
       type="text"
       inputmode="none"
-      placeholder="Answer"
+      placeholder="คำตอบ"
       autocomplete="off"
     >
 
@@ -170,8 +176,9 @@
     if (isTable) {
       active = false;
       waiting = false;
+      document.getElementById("startBtn").textContent = "เริ่มฝึก";
       clearTimeout(feedbackTimer);
-      question.textContent = "Press Start";
+      question.textContent = "กดเริ่มฝึกเพื่อรับโจทย์";
       feedback.textContent = "";
       divisionFacts.innerHTML = "";
     }
@@ -209,6 +216,7 @@
     if (!s) {
       active = false;
       question.textContent = "เช็กช่องด้านบนอีกครั้ง";
+      document.getElementById("startBtn").textContent = "เริ่มฝึก";
       return;
     }
 
@@ -321,6 +329,7 @@
 
     active = true;
     waiting = false;
+    document.getElementById("startBtn").textContent = "เริ่มใหม่";
 
     feedback.textContent = "";
     divisionFacts.innerHTML = "";

@@ -25,6 +25,18 @@ ranges.forEach((r, i) => {
   rangesDiv.appendChild(label);
 });
 
+const rangeSummary = document.getElementById("rangeSummary");
+
+function updateRangeSummary() {
+  const selectedCount = document.querySelectorAll(".range:checked").length;
+  rangeSummary.textContent = selectedCount
+    ? `เลือกแล้ว ${selectedCount} ชุด`
+    : "เลือกอย่างน้อย 1 ชุด";
+}
+
+rangesDiv.addEventListener("change", updateRangeSummary);
+updateRangeSummary();
+
 let a, b;
 let total = 0;
 let correct = 0;
@@ -83,7 +95,8 @@ function nextQuestion() {
     if (selected.length === 0) {
       active = false;
       document.getElementById("question").textContent =
-        "Select a range!";
+        "เลือกชุดเลขก่อนเริ่มฝึก";
+      document.getElementById("startBtn").textContent = "เริ่มฝึก";
       return;
     }
 
@@ -103,7 +116,8 @@ function nextQuestion() {
         min < 1 || max < 1) {
       active = false;
       document.getElementById("question").textContent =
-        "Invalid multiplier!";
+        "เช็กช่วงตัวคูณอีกครั้ง";
+      document.getElementById("startBtn").textContent = "เริ่มฝึก";
       return;
     }
 
@@ -210,6 +224,7 @@ document.getElementById("startBtn").onclick = () => {
 
   active = true;
   waiting = false;
+  document.getElementById("startBtn").textContent = "เริ่มใหม่";
 
   feedback.textContent = "";
 

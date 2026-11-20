@@ -152,6 +152,135 @@ button {
     font-size: 15px;
   }
 }
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.page-header h1 {
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+.page-intro,
+.section-heading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.page-header .nav-btn {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 10px 14px;
+  font-size: 15px;
+}
+
+.section-heading {
+  margin-bottom: 17px;
+}
+
+.section-heading h2 {
+  margin: 0 0 3px;
+  font-size: 19px;
+}
+
+.multiplier-setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #141d27;
+}
+
+.input-pair {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.controls .input-pair input {
+  width: 62px;
+  border-radius: 9px;
+  text-align: center;
+}
+
+.range-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+  color: var(--text);
+  font-weight: 700;
+}
+
+#rangeSummary {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+#ranges label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  cursor: pointer;
+}
+
+#ranges input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  accent-color: var(--blue);
+}
+
+#startBtn {
+  margin-top: 8px;
+}
+
+.keypad-hint {
+  margin: 6px 0 8px;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+#viewPractice .keypad-hint {
+  margin-top: 0;
+}
+
+@media (max-width: 500px) {
+  .page-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .page-header h1 {
+    margin-top: 0;
+  }
+
+  .page-header .nav-btn {
+    width: 100%;
+  }
+
+  .multiplier-setting {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
 #divisionFacts {
   min-height: 64px;
   margin: 0 0 12px;

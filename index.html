@@ -16,33 +16,47 @@
 
 <div class="container">
 
+  <header class="page-header">
+    <div>
   <h1>🧠 Micro Facts Trainer</h1>
-  <a href="table.html" class="nav-btn">📖 สูตรคูณ</a>
+      <p class="page-intro">ฝึกโจทย์ทีละข้อ ตอบด้วยแป้นตัวเลข แล้วติดตามความแม่นยำของคุณ</p>
+    </div>
+    <a href="table.html" class="nav-btn">📖 ดูสูตรคูณ</a>
+  </header>
   
   <div class="controls">
+    <div class="section-heading">
+      <h2>เลือกโจทย์ที่จะฝึก</h2>
+      <p>เลือกชุดเลขได้มากกว่าหนึ่งชุด</p>
+    </div>
 
-    <label>
-      Multiplier
-      <input id="minMultiplier" type="number" value="4">
-      -
-      <input id="maxMultiplier" type="number" value="9">
+    <label class="multiplier-setting">
+      <span>ตัวคูณ</span>
+      <span class="input-pair">
+        <span>ตั้งแต่</span>
+        <input id="minMultiplier" type="number" inputmode="numeric" value="4" aria-label="ตัวคูณเริ่มต้น">
+        <span>ถึง</span>
+        <input id="maxMultiplier" type="number" inputmode="numeric" value="9" aria-label="ตัวคูณสิ้นสุด">
+      </span>
     </label>
 
+    <div class="range-heading"><span>ชุดเลข</span><span id="rangeSummary" aria-live="polite"></span></div>
     <div id="ranges"></div>
 
-    <button id="startBtn">Start Training</button>
+    <button id="startBtn">เริ่มฝึก</button>
 
   </div>
 
-  <div id="question">Press Start</div>
+  <div id="question">กดเริ่มฝึกเพื่อรับโจทย์</div>
 
   <div id="feedback"></div>
+  <p class="keypad-hint">แตะตัวเลข แล้วกด ↵ เพื่อส่งคำตอบ</p>
 
   <input
     id="answer"
     type="number"
     inputmode="none"
-    placeholder="Answer"
+    placeholder="คำตอบ"
     autocomplete="off"
   >
 
