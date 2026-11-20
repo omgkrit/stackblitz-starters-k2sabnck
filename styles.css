@@ -135,6 +135,7 @@ button {
 .enter-btn {
   background: linear-gradient(180deg, #25a965, #147441);
   border-bottom-color: #0b4d2a;
+  font-size: 18px;
 }
 
 #submitBtn {
@@ -156,6 +157,10 @@ button {
   .num-btn {
     height: 75px;
     font-size: 30px;
+  }
+
+  .enter-btn {
+    font-size: 15px;
   }
 }
 #divisionFacts {

@@ -80,7 +80,7 @@
 
       <button class="num-btn delete-btn" data-key="backspace">⌫</button>
       <button class="num-btn" data-key="0">0</button>
-      <button class="num-btn enter-btn" data-key="enter">↵</button>
+      <button class="num-btn enter-btn" data-key="enter">ส่งคำตอบ</button>
     </div>
 
     <button id="submitBtn">ส่งคำตอบ</button>
@@ -339,6 +339,11 @@
       const key = button.dataset.key;
 
       if (!active || waiting) return;
+
+      if (key === "enter") {
+        submitAnswer();
+        return;
+      }
 
       if (key === "backspace") {
         answer.value = answer.value.slice(0, -1);
