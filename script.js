@@ -4,6 +4,7 @@ const rangeSummary = document.getElementById("rangeSummary");
 const answer = document.getElementById("answer");
 const factorAnswers = document.getElementById("factorAnswers");
 const feedback = document.getElementById("feedback");
+const divisionFacts = document.getElementById("divisionFacts");
 const question = document.getElementById("question");
 const startBtn = document.getElementById("startBtn");
 let mode = "multiply", active = false, waiting = false, a = 0, b = 0;
@@ -46,6 +47,7 @@ function setMode(next) {
     : "แตะตัวเลข แล้วกด ↵ เพื่อส่งคำตอบ";
   question.innerHTML = '<span class="question-ready-en">Ready?</span><span class="question-ready-th">เริ่มฝึกเมื่อพร้อม</span>';
   feedback.textContent = "";
+  divisionFacts.innerHTML = "";
   startBtn.textContent = "เริ่มฝึก";
   updateStats();
 }
@@ -118,8 +120,12 @@ function updateStats() {
 }
 function result(isCorrect, seconds, retry = { a, b }) {
   total++;
-  if (isCorrect) { correct++; streak++; totalTime += seconds; feedback.textContent = "ถูกต้อง ✓"; feedback.style.color = "#62d69a"; }
+  if (isCorrect) {
+    correct++; streak++; totalTime += seconds; feedback.textContent = "ถูกต้อง ✓"; feedback.style.color = "#62d69a";
+    divisionFacts.innerHTML = `<div>${a * b} ÷ ${a} = ${b}</div><div>${a * b} ÷ ${b} = ${a}</div>`;
+  }
   else {
+    divisionFacts.innerHTML = "";
     streak = 0; wrongQueue.push(retry);
     if (mode === "multiply") {
       const key = `${retry.a}x${retry.b}`;
@@ -145,7 +151,7 @@ function submitAnswer() {
 }
 startBtn.addEventListener("click", () => {
   clearTimeout(feedbackTimer); total = 0; correct = 0; streak = 0; totalTime = 0; wrongQueue = [];
-  active = true; waiting = false; startBtn.textContent = "เริ่มใหม่"; feedback.textContent = ""; updateStats(); setQuestion();
+  active = true; waiting = false; startBtn.textContent = "เริ่มใหม่"; feedback.textContent = ""; divisionFacts.innerHTML = ""; updateStats(); setQuestion();
 });
 document.querySelectorAll(".num-btn").forEach(button => button.addEventListener("click", () => {
   if (!active || waiting) return;
