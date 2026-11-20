@@ -43,49 +43,51 @@
     <div class="range-heading"><span>ชุดเลข</span><span id="rangeSummary" aria-live="polite"></span></div>
     <div id="ranges"></div>
 
+  </div>
+
+  <section class="training-area" aria-label="พื้นที่ฝึก">
     <button id="startBtn">เริ่มฝึก</button>
 
-  </div>
+    <div class="question-panel">
+      <div id="question">กดเริ่มฝึกเพื่อรับโจทย์</div>
+      <div id="feedback"></div>
+    </div>
 
-  <div id="question">กดเริ่มฝึกเพื่อรับโจทย์</div>
+    <div class="answer-panel">
+      <p class="keypad-hint">แตะตัวเลข แล้วกด ↵ เพื่อส่งคำตอบ</p>
+      <input
+        id="answer"
+        type="number"
+        inputmode="none"
+        placeholder="คำตอบ"
+        autocomplete="off"
+      >
+    </div>
 
-  <div id="feedback"></div>
-  <p class="keypad-hint">แตะตัวเลข แล้วกด ↵ เพื่อส่งคำตอบ</p>
+    <div id="numpad">
+      <button class="num-btn" data-key="1">1</button>
+      <button class="num-btn" data-key="2">2</button>
+      <button class="num-btn" data-key="3">3</button>
 
-  <input
-    id="answer"
-    type="number"
-    inputmode="none"
-    placeholder="คำตอบ"
-    autocomplete="off"
-  >
+      <button class="num-btn" data-key="4">4</button>
+      <button class="num-btn" data-key="5">5</button>
+      <button class="num-btn" data-key="6">6</button>
 
-  <!-- Number Pad -->
-  <div id="numpad">
+      <button class="num-btn" data-key="7">7</button>
+      <button class="num-btn" data-key="8">8</button>
+      <button class="num-btn" data-key="9">9</button>
 
-    <button class="num-btn" data-key="1">1</button>
-    <button class="num-btn" data-key="2">2</button>
-    <button class="num-btn" data-key="3">3</button>
+      <button class="num-btn delete-btn" data-key="backspace">⌫</button>
+      <button class="num-btn" data-key="0">0</button>
+      <button class="num-btn enter-btn" data-key="enter">↵</button>
+    </div>
 
-    <button class="num-btn" data-key="4">4</button>
-    <button class="num-btn" data-key="5">5</button>
-    <button class="num-btn" data-key="6">6</button>
-
-    <button class="num-btn" data-key="7">7</button>
-    <button class="num-btn" data-key="8">8</button>
-    <button class="num-btn" data-key="9">9</button>
-
-    <button class="num-btn delete-btn" data-key="backspace">⌫</button>
-    <button class="num-btn" data-key="0">0</button>
-    <button class="num-btn enter-btn" data-key="enter">↵</button>
-
-  </div>
-
-  <div class="stats">
-    <div id="accuracy">Accuracy: 0%</div>
-    <div id="average">Average: 0.00 s</div>
-    <div id="streak">Streak: 0</div>
-  </div>
+    <div class="stats">
+      <div id="accuracy">Accuracy: 0%</div>
+      <div id="average">Average: 0.00 s</div>
+      <div id="streak">Streak: 0</div>
+    </div>
+  </section>
 
 </div>
 

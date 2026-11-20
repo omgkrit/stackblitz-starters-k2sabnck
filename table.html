@@ -54,22 +54,25 @@
 
   <!-- มุมมองที่ 2: ฝึก -->
   <div id="viewPractice" class="hidden">
-
+    <section class="training-area" aria-label="พื้นที่ฝึก">
     <button id="startBtn">เริ่มฝึก</button>
 
-    <div id="question">กดเริ่มฝึกเพื่อรับโจทย์</div>
+    <div class="question-panel">
+      <div id="question">กดเริ่มฝึกเพื่อรับโจทย์</div>
+      <div id="feedback"></div>
+      <div id="divisionFacts"></div>
+    </div>
 
-    <div id="feedback"></div>
-    <div id="divisionFacts"></div>
-    <p class="keypad-hint">แตะตัวเลข แล้วกด ↵ เพื่อส่งคำตอบ</p>
-
-    <input
-      id="answer"
-      type="text"
-      inputmode="none"
-      placeholder="คำตอบ"
-      autocomplete="off"
-    >
+    <div class="answer-panel">
+      <p class="keypad-hint">แตะตัวเลข แล้วกด ↵ เพื่อส่งคำตอบ</p>
+      <input
+        id="answer"
+        type="text"
+        inputmode="none"
+        placeholder="คำตอบ"
+        autocomplete="off"
+      >
+    </div>
 
     <div id="numpad">
       <button class="num-btn" data-key="1">1</button>
@@ -94,7 +97,7 @@
       <div id="average">Average: 0.00 s</div>
       <div id="streak">Streak: 0</div>
     </div>
-
+    </section>
   </div>
 
 </div>
