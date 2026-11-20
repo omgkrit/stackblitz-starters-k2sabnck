@@ -33,9 +33,9 @@
       <span class="mode-card-title">หาคู่ตัวประกอบ</span>
       <span class="mode-card-note">เห็นผลคูณ แล้วเติมเลข 2 ตัว</span>
     </button>
-    <button class="mode-card" data-mode="estimate">
-      <span class="mode-card-title">กะผลคูณ</span>
-      <span class="mode-card-note">เลือกค่าประมาณที่ใกล้ที่สุด</span>
+    <button class="mode-card" data-mode="review">
+      <span class="mode-card-title">ทบทวนข้อคูณที่พลาด</span>
+      <span class="mode-card-note" id="reviewSummary">จำข้อที่ตอบผิดไว้ฝึกซ้ำ</span>
     </button>
   </section>
   
@@ -93,7 +93,6 @@
         <span>×</span>
         <button class="factor-slot" data-slot="1" aria-label="ตัวประกอบตัวที่สอง">—</button>
       </div>
-      <div id="estimateOptions" class="estimate-options hidden"></div>
     </div>
 
     <div id="numpad">

@@ -480,25 +480,6 @@ button {
 
 .factor-slot.selected { border-color: #65a9ff; box-shadow: 0 0 0 3px #3987e833; }
 
-.estimate-options {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.estimate-choice {
-  min-height: 64px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: var(--panel);
-  color: var(--text);
-  font-size: 24px;
-}
-
-.estimate-choice.correct { background: #176846; }
-.estimate-choice.incorrect { background: #773d44; }
-
 /* Keep mode switching reliable when more specific layout rules define display. */
 .hidden { display: none !important; }
 

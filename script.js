@@ -3,14 +3,20 @@ const rangesDiv = document.getElementById("ranges");
 const rangeSummary = document.getElementById("rangeSummary");
 const answer = document.getElementById("answer");
 const factorAnswers = document.getElementById("factorAnswers");
-const estimateOptions = document.getElementById("estimateOptions");
 const feedback = document.getElementById("feedback");
 const question = document.getElementById("question");
 const startBtn = document.getElementById("startBtn");
 let mode = "multiply", active = false, waiting = false, a = 0, b = 0;
-let factorValues = ["", ""], activeSlot = 0, targetEstimate = 0;
+let factorValues = ["", ""], activeSlot = 0, reviewCurrent = null;
 let total = 0, correct = 0, streak = 0, totalTime = 0, startTime = 0;
 let wrongQueue = [], feedbackTimer;
+let mistakeBank = JSON.parse(localStorage.getItem("microFactsMistakes") || "[]");
+const reviewSummary = document.getElementById("reviewSummary");
+function saveMistakes() {
+  localStorage.setItem("microFactsMistakes", JSON.stringify(mistakeBank));
+  reviewSummary.textContent = mistakeBank.length ? `มี ${mistakeBank.length} ข้อรอทบทวน` : "ยังไม่มีข้อที่พลาด · ลองฝึกคูณก่อน";
+}
+saveMistakes();
 
 ranges.forEach(([low, high], i) => {
   const label = document.createElement("label");
@@ -31,14 +37,13 @@ function setMode(next) {
   active = false;
   document.querySelectorAll(".mode-card").forEach(card => card.classList.toggle("active", card.dataset.mode === mode));
   document.getElementById("multiplySettings").classList.toggle("hidden", mode !== "multiply");
-  document.getElementById("advancedSettings").classList.toggle("hidden", mode === "multiply");
+  document.getElementById("advancedSettings").classList.toggle("hidden", mode !== "factors");
   factorAnswers.classList.toggle("hidden", mode !== "factors");
-  estimateOptions.classList.toggle("hidden", mode !== "estimate");
-  answer.classList.toggle("hidden", mode !== "multiply");
-  document.getElementById("numpad").classList.toggle("hidden", mode === "estimate");
+  answer.classList.toggle("hidden", mode === "factors");
+  document.getElementById("numpad").classList.remove("hidden");
   document.querySelector(".answer-panel .keypad-hint").textContent = mode === "factors"
     ? "คลิกช่อง แล้วพิมพ์เลข · Tab สลับช่อง · Enter ส่งคำตอบ"
-    : mode === "estimate" ? "เลือกคำตอบที่ใกล้ที่สุด" : "แตะตัวเลข แล้วกด ↵ เพื่อส่งคำตอบ";
+    : "แตะตัวเลข แล้วกด ↵ เพื่อส่งคำตอบ";
   question.innerHTML = '<span class="question-ready-en">Ready?</span><span class="question-ready-th">เริ่มฝึกเมื่อพร้อม</span>';
   feedback.textContent = "";
   startBtn.textContent = "เริ่มฝึก";
@@ -47,7 +52,13 @@ function setMode(next) {
 document.querySelectorAll(".mode-card").forEach(card => card.addEventListener("click", () => setMode(card.dataset.mode)));
 
 function setQuestion() {
-  if (wrongQueue.length && Math.random() < .3) ({ a, b } = wrongQueue.shift());
+  reviewCurrent = null;
+  if (mode === "review") {
+    if (!mistakeBank.length) { active = false; question.textContent = "ยังไม่มีข้อที่พลาดให้ทบทวน"; startBtn.textContent = "เริ่มฝึก"; return; }
+    reviewCurrent = mistakeBank[rand(0, mistakeBank.length - 1)];
+    a = reviewCurrent.a; b = reviewCurrent.b;
+  }
+  else if (wrongQueue.length && Math.random() < .3) ({ a, b } = wrongQueue.shift());
   else if (mode === "multiply") {
     const selected = [...document.querySelectorAll(".range")].flatMap((el, i) => el.checked ? [ranges[i]] : []);
     if (!selected.length) { active = false; question.textContent = "เลือกชุดเลขก่อนเริ่มฝึก"; return; }
@@ -61,10 +72,6 @@ function setQuestion() {
     const lo = level === "easy" ? 2 : level === "medium" ? 4 : 10;
     const hi = level === "easy" ? 12 : level === "medium" ? 20 : 35;
     a = rand(lo, hi); b = rand(lo, hi);
-  } else {
-    const level = document.getElementById("challengeLevel").value;
-    a = rand(level === "hard" ? 100 : 20, level === "easy" ? 49 : level === "medium" ? 99 : 999);
-    b = rand(level === "easy" ? 3 : 10, level === "easy" ? 9 : 99);
   }
   if (mode === "factors") {
     question.textContent = `${a * b}`;
@@ -73,7 +80,6 @@ function setQuestion() {
     question.textContent = `${a} × ${b}`;
     answer.value = "";
   }
-  if (mode === "estimate") renderEstimateOptions();
   startTime = performance.now();
 }
 
@@ -105,13 +111,6 @@ document.addEventListener("keydown", event => {
   }
 });
 
-function renderEstimateOptions() {
-  targetEstimate = Math.round((a * b) / 10) * 10;
-  const options = [...new Set([targetEstimate, targetEstimate - 10, targetEstimate + 10])].sort(() => Math.random() - .5);
-  estimateOptions.innerHTML = options.map(value => `<button class="estimate-choice" data-value="${value}">${value}</button>`).join("");
-  estimateOptions.querySelectorAll("button").forEach(button => button.addEventListener("click", () => submitEstimate(Number(button.dataset.value), button)));
-}
-
 function updateStats() {
   document.getElementById("accuracy").textContent = `Accuracy: ${total ? Math.round(correct / total * 100) : 0}%`;
   document.getElementById("average").textContent = `Average: ${correct ? (totalTime / correct).toFixed(2) : "0.00"} s`;
@@ -120,7 +119,19 @@ function updateStats() {
 function result(isCorrect, seconds, retry = { a, b }) {
   total++;
   if (isCorrect) { correct++; streak++; totalTime += seconds; feedback.textContent = "ถูกต้อง ✓"; feedback.style.color = "#62d69a"; }
-  else { streak = 0; wrongQueue.push(retry); feedback.textContent = `ลองอีกครั้ง · คำตอบ ${retry.a} × ${retry.b} = ${retry.a * retry.b}`; feedback.style.color = "#ff8585"; }
+  else {
+    streak = 0; wrongQueue.push(retry);
+    if (mode === "multiply") {
+      const key = `${retry.a}x${retry.b}`;
+      if (!mistakeBank.some(item => `${item.a}x${item.b}` === key)) mistakeBank.push(retry);
+      saveMistakes();
+    }
+    feedback.textContent = `ลองอีกครั้ง · คำตอบ ${retry.a} × ${retry.b} = ${retry.a * retry.b}`; feedback.style.color = "#ff8585";
+  }
+  if (isCorrect && mode === "review" && reviewCurrent) {
+    mistakeBank = mistakeBank.filter(item => !(item.a === reviewCurrent.a && item.b === reviewCurrent.b));
+    saveMistakes();
+  }
   updateStats(); waiting = true;
   feedbackTimer = setTimeout(() => { feedback.textContent = ""; waiting = false; if (active) setQuestion(); }, 850);
 }
@@ -132,21 +143,12 @@ function submitAnswer() {
     result(x * y === a * b, (performance.now() - startTime) / 1000, { a, b });
   } else if (answer.value) result(Number(answer.value) === a * b, (performance.now() - startTime) / 1000, { a, b });
 }
-function submitEstimate(value, button) {
-  if (!active || waiting) return;
-  estimateOptions.querySelectorAll("button").forEach(el => el.disabled = true);
-  const approxCorrect = value === targetEstimate;
-  button.classList.add(approxCorrect ? "correct" : "incorrect");
-  result(approxCorrect, (performance.now() - startTime) / 1000, { a, b });
-  feedback.textContent = `${approxCorrect ? "ใกล้มาก" : `ค่าที่ใกล้คือ ${targetEstimate}`} · คำตอบจริง ${a * b}`;
-}
-
 startBtn.addEventListener("click", () => {
   clearTimeout(feedbackTimer); total = 0; correct = 0; streak = 0; totalTime = 0; wrongQueue = [];
   active = true; waiting = false; startBtn.textContent = "เริ่มใหม่"; feedback.textContent = ""; updateStats(); setQuestion();
 });
 document.querySelectorAll(".num-btn").forEach(button => button.addEventListener("click", () => {
-  if (!active || waiting || mode === "estimate") return;
+  if (!active || waiting) return;
   const key = button.dataset.key;
   if (mode === "factors") {
     if (key === "enter") return submitAnswer();
