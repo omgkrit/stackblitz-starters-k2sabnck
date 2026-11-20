@@ -138,17 +138,6 @@ button {
   font-size: 18px;
 }
 
-#submitBtn {
-  display: block;
-  width: 100%;
-  min-height: 58px;
-  margin: 16px 0 12px;
-  padding: 14px 20px;
-  color: white;
-  background: #2878d0;
-  font-size: 22px;
-}
-
 @media (max-width: 500px) {
   #numpad {
     gap: 10px;

@@ -80,10 +80,8 @@
 
       <button class="num-btn delete-btn" data-key="backspace">⌫</button>
       <button class="num-btn" data-key="0">0</button>
-      <button class="num-btn enter-btn" data-key="enter">ส่งคำตอบ</button>
+      <button class="num-btn enter-btn" data-key="enter" aria-label="ส่งคำตอบ">↵</button>
     </div>
-
-    <button id="submitBtn">ส่งคำตอบ</button>
 
     <div class="stats">
       <div id="accuracy">Accuracy: 0%</div>
@@ -354,9 +352,6 @@
       answer.focus();
     });
   });
-
-  // ปุ่มส่งคำตอบ
-  document.getElementById("submitBtn").addEventListener("click", submitAnswer);
 
   // คีย์บอร์ดจริง: Enter = ส่ง, พิมพ์ได้เฉพาะตัวเลข
   answer.addEventListener("keydown", e => {
