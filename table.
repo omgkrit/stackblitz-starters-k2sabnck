@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สูตรคูณ</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="a-math-icon-512.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Micro Facts">
+</head>
+<body>
+
+<div class="container">
+
+  <a href="index.html" class="nav-btn">← กลับไปฝึก</a>
+
+  <h1>📖 สูตรคูณ</h1>
+
+  <div class="controls">
+    <label class="table-label">
+      แม่
+      <input id="tableNum" type="number" inputmode="numeric" value="7">
+    </label>
+
+    <label class="table-label">
+      คูณถึง
+      <input id="upTo" type="number" inputmode="numeric" value="12">
+    </label>
+  </div>
+
+  <div id="result"></div>
+
+</div>
+
+<script>
+  const tableNum = document.getElementById("tableNum");
+  const upTo = document.getElementById("upTo");
+  const result = document.getElementById("result");
+
+  function render() {
+    const n = Number(tableNum.value);
+    const m = Number(upTo.value);
+
+    // ถ้าใส่ค่าไม่ถูก (ว่าง, ทศนิยม, เกินช่วง) ให้ขึ้นข้อความแทน
+    if (!Number.isInteger(n) || !Number.isInteger(m) ||
+        n < 1 || m < 1 || n > 99 || m > 100) {
+      result.innerHTML =
+        '<div class="msg">ใส่แม่ 1-99 และคูณถึง 1-100</div>';
+      return;
+    }
+
+    let html = "";
+
+    for (let i = 1; i <= m; i++) {
+      html += `
+        <div class="row">
+          <span class="expr">${n} × ${i}</span>
+          <span class="eq">=</span>
+          <span class="ans">${n * i}</span>
+        </div>
+      `;
+    }
+
+    result.innerHTML = html;
+  }
+
+  // อัปเดตทันทีที่พิมพ์ ไม่ต้องกดปุ่ม
+  tableNum.addEventListener("input", render);
+  upTo.addEventListener("input", render);
+
+  render();
+</script>
+
+</body>
+</html>
