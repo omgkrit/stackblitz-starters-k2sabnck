@@ -15,51 +15,136 @@
 
 <div class="container">
 
-  <a href="index.html" class="nav-btn">← กลับไปฝึก</a>
+  <a href="index.html" class="nav-btn">← กลับไปหน้าฝึกหลัก</a>
 
   <h1>📖 สูตรคูณ</h1>
 
+  <!-- ตั้งค่า: ใช้ร่วมกันทั้งหน้าตารางและหน้าฝึก -->
   <div class="controls">
+
     <label class="table-label">
       แม่
       <input id="tableNum" type="number" inputmode="numeric" value="7">
     </label>
 
     <label class="table-label">
-      คูณถึง
-      <input id="upTo" type="number" inputmode="numeric" value="12">
+      ตัวคูณ จาก
+      <input id="fromNum" type="number" inputmode="numeric" value="1">
+      ถึง
+      <input id="toNum" type="number" inputmode="numeric" value="12">
     </label>
+
   </div>
 
-  <div id="result"></div>
+  <!-- ปุ่มสลับ ดูตาราง / ฝึก -->
+  <div class="tabs">
+    <button id="tabTable" class="tab-btn active">📖 ดูตาราง</button>
+    <button id="tabPractice" class="tab-btn">✏️ ฝึก</button>
+  </div>
+
+  <!-- มุมมองที่ 1: ตาราง -->
+  <div id="viewTable">
+    <div id="result"></div>
+  </div>
+
+  <!-- มุมมองที่ 2: ฝึก -->
+  <div id="viewPractice" class="hidden">
+
+    <button id="startBtn">Start Training</button>
+
+    <div id="question">Press Start</div>
+
+    <div id="feedback"></div>
+    <div id="divisionFacts"></div>
+
+    <input
+      id="answer"
+      type="text"
+      inputmode="none"
+      placeholder="Answer"
+      autocomplete="off"
+    >
+
+    <div id="numpad">
+      <button class="num-btn" data-key="1">1</button>
+      <button class="num-btn" data-key="2">2</button>
+      <button class="num-btn" data-key="3">3</button>
+
+      <button class="num-btn" data-key="4">4</button>
+      <button class="num-btn" data-key="5">5</button>
+      <button class="num-btn" data-key="6">6</button>
+
+      <button class="num-btn" data-key="7">7</button>
+      <button class="num-btn" data-key="8">8</button>
+      <button class="num-btn" data-key="9">9</button>
+
+      <button class="num-btn delete-btn" data-key="backspace">⌫</button>
+      <button class="num-btn" data-key="0">0</button>
+    </div>
+
+    <button id="submitBtn">ส่งคำตอบ</button>
+
+    <div class="stats">
+      <div id="accuracy">Accuracy: 0%</div>
+      <div id="average">Average: 0.00 s</div>
+      <div id="streak">Streak: 0</div>
+    </div>
+
+  </div>
 
 </div>
 
 <script>
+  // ---------- ส่วนตั้งค่า (อ่านจากช่องด้านบน) ----------
+
   const tableNum = document.getElementById("tableNum");
-  const upTo = document.getElementById("upTo");
+  const fromNum = document.getElementById("fromNum");
+  const toNum = document.getElementById("toNum");
+
+  // คืนค่า {n, from, to} ถ้าใส่ถูก ถ้าผิดคืน null
+  function readSettings() {
+    const n = Number(tableNum.value);
+    let from = Number(fromNum.value);
+    let to = Number(toNum.value);
+
+    if (!Number.isInteger(n) || !Number.isInteger(from) ||
+        !Number.isInteger(to) ||
+        n < 1 || n > 99 || from < 1 || from > 100 ||
+        to < 1 || to > 100) {
+      return null;
+    }
+
+    // ถ้าใส่กลับด้าน (เช่น 12 ถึง 1) สลับให้เอง
+    if (from > to) [from, to] = [to, from];
+
+    return { n, from, to };
+  }
+
+  function rand(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  // ---------- มุมมองตาราง ----------
+
   const result = document.getElementById("result");
 
-  function render() {
-    const n = Number(tableNum.value);
-    const m = Number(upTo.value);
+  function renderTable() {
+    const s = readSettings();
 
-    // ถ้าใส่ค่าไม่ถูก (ว่าง, ทศนิยม, เกินช่วง) ให้ขึ้นข้อความแทน
-    if (!Number.isInteger(n) || !Number.isInteger(m) ||
-        n < 1 || m < 1 || n > 99 || m > 100) {
+    if (!s) {
       result.innerHTML =
-        '<div class="msg">ใส่แม่ 1-99 และคูณถึง 1-100</div>';
+        '<div class="msg">ใส่แม่ 1-99 และตัวคูณ 1-100</div>';
       return;
     }
 
     let html = "";
 
-    for (let i = 1; i <= m; i++) {
+    for (let i = s.from; i <= s.to; i++) {
       html += `
         <div class="row">
-          <span class="expr">${n} × ${i}</span>
+          <span class="expr">${s.n} × ${i}</span>
           <span class="eq">=</span>
-          <span class="ans">${n * i}</span>
+          <span class="ans">${s.n * i}</span>
         </div>
       `;
     }
@@ -67,11 +152,228 @@
     result.innerHTML = html;
   }
 
-  // อัปเดตทันทีที่พิมพ์ ไม่ต้องกดปุ่ม
-  tableNum.addEventListener("input", render);
-  upTo.addEventListener("input", render);
+  // ---------- สลับ ดูตาราง / ฝึก ----------
 
-  render();
+  const tabTable = document.getElementById("tabTable");
+  const tabPractice = document.getElementById("tabPractice");
+  const viewTable = document.getElementById("viewTable");
+  const viewPractice = document.getElementById("viewPractice");
+
+  function showTab(name) {
+    const isTable = name === "table";
+
+    viewTable.classList.toggle("hidden", !isTable);
+    viewPractice.classList.toggle("hidden", isTable);
+    tabTable.classList.toggle("active", isTable);
+    tabPractice.classList.toggle("active", !isTable);
+
+    // ออกจากหน้าฝึก = หยุดฝึก
+    if (isTable) {
+      active = false;
+      waiting = false;
+      clearTimeout(feedbackTimer);
+      question.textContent = "Press Start";
+      feedback.textContent = "";
+      divisionFacts.innerHTML = "";
+    }
+  }
+
+  tabTable.onclick = () => showTab("table");
+  tabPractice.onclick = () => showTab("practice");
+
+  // ---------- มุมมองฝึก ----------
+
+  let a, b;
+  let total = 0;
+  let correct = 0;
+  let streak = 0;
+  let totalTime = 0;
+  let startTime = 0;
+  let wrongQueue = [];
+  let feedbackTimer = null;
+  let active = false;
+  let waiting = false;
+
+  const question = document.getElementById("question");
+  const answer = document.getElementById("answer");
+  const feedback = document.getElementById("feedback");
+  const divisionFacts = document.getElementById("divisionFacts");
+
+  function nextQuestion() {
+
+    if (!active) return;
+
+    waiting = false;
+
+    const s = readSettings();
+
+    if (!s) {
+      active = false;
+      question.textContent = "เช็กช่องด้านบนอีกครั้ง";
+      return;
+    }
+
+    if (wrongQueue.length > 0 && Math.random() < 0.3) {
+
+      const q = wrongQueue.shift();
+      a = q.a;
+      b = q.b;
+
+    } else {
+
+      // แม่ที่เลือก × ตัวคูณสุ่มในช่วงที่ตั้งไว้ (สลับซ้าย-ขวาแบบสุ่ม)
+      const m = rand(s.from, s.to);
+
+      if (Math.random() < 0.5) {
+        a = s.n;
+        b = m;
+      } else {
+        a = m;
+        b = s.n;
+      }
+    }
+
+    question.textContent = `${a} × ${b}`;
+
+    answer.value = "";
+    answer.focus();
+
+    startTime = performance.now();
+  }
+
+  function updateStats() {
+
+    const acc = total
+      ? Math.round((correct / total) * 100)
+      : 0;
+
+    const avg = correct
+      ? (totalTime / correct).toFixed(2)
+      : "0.00";
+
+    document.getElementById("accuracy").textContent =
+      `Accuracy: ${acc}%`;
+
+    document.getElementById("average").textContent =
+      `Average: ${avg} s`;
+
+    document.getElementById("streak").textContent =
+      `Streak: ${streak}`;
+  }
+
+  function submitAnswer() {
+
+    if (!active || waiting || !answer.value) return;
+
+    const t = (performance.now() - startTime) / 1000;
+
+    total++;
+
+    const isCorrect = Number(answer.value) === a * b;
+
+    if (isCorrect) {
+
+      correct++;
+      streak++;
+      totalTime += t;
+
+      const product = a * b;
+
+      // ข้อความหารของข้อที่เพิ่งตอบ ค้างไว้จนกว่าจะตอบข้อถัดไป
+      divisionFacts.innerHTML = `
+        <div>${product} ÷ ${a} = ${b}</div>
+        <div>${product} ÷ ${b} = ${a}</div>
+      `;
+
+      updateStats();
+      nextQuestion();
+
+    } else {
+
+      streak = 0;
+      wrongQueue.push({ a, b });
+
+      divisionFacts.innerHTML = "";
+
+      feedback.textContent = `❌ Answer: ${a * b}`;
+      feedback.style.color = "#ff5555";
+
+      updateStats();
+
+      waiting = true;
+
+      feedbackTimer = setTimeout(() => {
+        feedback.textContent = "";
+        nextQuestion();
+      }, 1000);
+    }
+  }
+
+  // ปุ่ม Start
+  document.getElementById("startBtn").onclick = () => {
+
+    clearTimeout(feedbackTimer);
+
+    total = 0;
+    correct = 0;
+    streak = 0;
+    totalTime = 0;
+    wrongQueue = [];
+
+    active = true;
+    waiting = false;
+
+    feedback.textContent = "";
+    divisionFacts.innerHTML = "";
+
+    updateStats();
+    nextQuestion();
+  };
+
+  // แป้นเลขบนจอ
+  document.querySelectorAll(".num-btn").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      const key = button.dataset.key;
+
+      if (!active || waiting) return;
+
+      if (key === "backspace") {
+        answer.value = answer.value.slice(0, -1);
+      } else {
+        answer.value += key;
+      }
+
+      answer.focus();
+    });
+  });
+
+  // ปุ่มส่งคำตอบ
+  document.getElementById("submitBtn").addEventListener("click", submitAnswer);
+
+  // คีย์บอร์ดจริง: Enter = ส่ง, พิมพ์ได้เฉพาะตัวเลข
+  answer.addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      submitAnswer();
+    }
+  });
+
+  answer.addEventListener("input", () => {
+    answer.value = answer.value.replace(/\D/g, "");
+  });
+
+  // ---------- เมื่อแก้ตั้งค่าด้านบน ----------
+
+  [tableNum, fromNum, toNum].forEach(input => {
+    input.addEventListener("input", () => {
+      renderTable();
+      wrongQueue = []; // ล้างข้อที่ผิดค้างของแม่เก่า
+    });
+  });
+
+  renderTable();
 </script>
 
 </body>
