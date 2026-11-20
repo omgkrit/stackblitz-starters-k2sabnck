@@ -237,3 +237,234 @@ button {
 .hidden {
   display: none;
 }
+
+/* Calm, consistent interface polish */
+:root {
+  color-scheme: dark;
+  --page: #10151d;
+  --panel: #19222e;
+  --panel-raised: #202c3a;
+  --line: #2c3948;
+  --text: #f3f6fa;
+  --muted: #aab6c5;
+  --blue: #3987e8;
+  --blue-deep: #276dcc;
+  --green: #25a66a;
+}
+
+body {
+  min-height: 100vh;
+  background: radial-gradient(ellipse at 50% -18%, #20344b 0, var(--page) 58%);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 640px;
+  padding: 34px 0 48px;
+}
+
+h1 {
+  margin: 8px 0 24px;
+  font-size: clamp(26px, 5vw, 34px);
+  letter-spacing: -0.035em;
+}
+
+.controls {
+  background: color-mix(in srgb, var(--panel) 92%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 14px 38px #0003;
+}
+
+.controls label,
+.table-label {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.controls input,
+.table-label input {
+  color: var(--text);
+  background: #111923;
+  border: 1px solid #3a4a5c;
+  border-radius: 10px;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+
+.controls input:focus,
+.table-label input:focus,
+#answer:focus {
+  border-color: #65a9ff;
+  box-shadow: 0 0 0 3px #3987e833;
+}
+
+#ranges {
+  grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));
+  gap: 9px;
+}
+
+#ranges label {
+  background: #202c3a;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  color: var(--text);
+  text-align: center;
+}
+
+button,
+.nav-btn {
+  transition: transform .15s ease, filter .15s ease, border-color .15s ease;
+}
+
+button:hover,
+.nav-btn:hover {
+  filter: brightness(1.09);
+}
+
+button:focus-visible,
+.nav-btn:focus-visible {
+  outline: 3px solid #8bc1ff;
+  outline-offset: 3px;
+}
+
+#startBtn {
+  min-height: 54px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--blue), var(--blue-deep));
+  box-shadow: 0 7px 18px #1b5eb844;
+}
+
+#question {
+  margin: 28px 0 14px;
+  padding: 24px 16px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(145deg, #1b2633, #151e29);
+  font-size: clamp(48px, 10vw, 64px);
+  letter-spacing: .025em;
+}
+
+#feedback {
+  min-height: 32px;
+  color: #ff8585;
+}
+
+#answer {
+  border: 1px solid #3a4a5c;
+  border-radius: 14px;
+  background: #151e29;
+  font-weight: 700;
+}
+
+#answer::placeholder {
+  color: #758396;
+  font-weight: 500;
+}
+
+#numpad {
+  gap: 10px;
+  margin: 16px auto 20px;
+}
+
+.num-btn {
+  border: 1px solid #354457;
+  border-bottom: 3px solid #202b39;
+  border-radius: 13px;
+  background: linear-gradient(180deg, #293747, #202b39);
+  box-shadow: 0 5px 12px #0002;
+}
+
+.delete-btn {
+  background: linear-gradient(180deg, #b74f55, #923b43);
+  border-bottom-color: #682d33;
+}
+
+.enter-btn {
+  background: linear-gradient(180deg, #2db87a, #19895a);
+  border-bottom-color: #126844;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.stats > div {
+  padding: 7px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+}
+
+.nav-btn {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+}
+
+.tabs {
+  gap: 8px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #141d27;
+}
+
+.tab-btn {
+  border-radius: 10px;
+  color: var(--muted);
+  background: transparent;
+}
+
+.tab-btn.active {
+  background: var(--blue);
+  box-shadow: 0 4px 12px #1b5eb833;
+}
+
+.table-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.table-label input {
+  width: 76px;
+  padding: 9px 10px;
+}
+
+.row {
+  border: 1px solid var(--line);
+  background: #19232f;
+}
+
+.row .ans {
+  color: #62d69a;
+}
+
+@media (max-width: 500px) {
+  .container {
+    width: min(92%, 640px);
+    padding-top: 22px;
+  }
+
+  .controls {
+    padding: 16px;
+  }
+
+  .table-label {
+    font-size: 18px;
+  }
+
+  .row {
+    font-size: 24px;
+  }
+}
