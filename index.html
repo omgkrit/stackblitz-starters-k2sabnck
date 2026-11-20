@@ -23,8 +23,23 @@
     </div>
     <a href="table.html" class="nav-btn">📖 ดูสูตรคูณ</a>
   </header>
+
+  <section class="mode-picker" aria-label="เลือกโหมดฝึก">
+    <button class="mode-card active" data-mode="multiply">
+      <span class="mode-card-title">คูณให้ไว</span>
+      <span class="mode-card-note">ฝึกจำคำตอบจากโจทย์คูณ</span>
+    </button>
+    <button class="mode-card" data-mode="factors">
+      <span class="mode-card-title">หาคู่ตัวประกอบ</span>
+      <span class="mode-card-note">เห็นผลคูณ แล้วเติมเลข 2 ตัว</span>
+    </button>
+    <button class="mode-card" data-mode="estimate">
+      <span class="mode-card-title">กะผลคูณ</span>
+      <span class="mode-card-note">เลือกค่าประมาณที่ใกล้ที่สุด</span>
+    </button>
+  </section>
   
-  <div class="controls">
+  <div class="controls" id="multiplySettings">
     <div class="section-heading">
       <h2>เลือกโจทย์ที่จะฝึก</h2>
       <p>เลือกชุดเลขได้มากกว่าหนึ่งชุด</p>
@@ -45,6 +60,17 @@
 
   </div>
 
+  <div class="controls mode-settings hidden" id="advancedSettings">
+    <label class="multiplier-setting">
+      <span>ระดับโจทย์</span>
+      <select id="challengeLevel" aria-label="เลือกระดับโจทย์">
+        <option value="easy">ง่าย · 2 หลัก × 1 หลัก</option>
+        <option value="medium" selected>กลาง · 2 หลัก × 2 หลัก</option>
+        <option value="hard">ยาก · 3 หลัก × 2 หลัก</option>
+      </select>
+    </label>
+  </div>
+
   <section class="training-area" aria-label="พื้นที่ฝึก">
     <button id="startBtn">เริ่มฝึก</button>
 
@@ -62,6 +88,12 @@
         placeholder="คำตอบ"
         autocomplete="off"
       >
+      <div id="factorAnswers" class="factor-answers hidden" aria-label="ใส่คู่ตัวประกอบ">
+        <button class="factor-slot selected" data-slot="0" aria-label="ตัวประกอบตัวที่หนึ่ง">—</button>
+        <span>×</span>
+        <button class="factor-slot" data-slot="1" aria-label="ตัวประกอบตัวที่สอง">—</button>
+      </div>
+      <div id="estimateOptions" class="estimate-options hidden"></div>
     </div>
 
     <div id="numpad">

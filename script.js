@@ -1,272 +1,140 @@
-console.log("UPDATED VERSION 3 - NUMBER PAD");
-
-const ranges = [
-  [13, 19],
-  [21, 29],
-  [31, 39],
-  [41, 49],
-  [51, 59],
-  [61, 69],
-  [71, 79],
-  [81, 89],
-  [91, 99],
-];
-
+const ranges = [[13, 19], [21, 29], [31, 39], [41, 49], [51, 59], [61, 69], [71, 79], [81, 89], [91, 99]];
 const rangesDiv = document.getElementById("ranges");
+const rangeSummary = document.getElementById("rangeSummary");
+const answer = document.getElementById("answer");
+const factorAnswers = document.getElementById("factorAnswers");
+const estimateOptions = document.getElementById("estimateOptions");
+const feedback = document.getElementById("feedback");
+const question = document.getElementById("question");
+const startBtn = document.getElementById("startBtn");
+let mode = "multiply", active = false, waiting = false, a = 0, b = 0;
+let factorValues = ["", ""], activeSlot = 0, targetEstimate = 0;
+let total = 0, correct = 0, streak = 0, totalTime = 0, startTime = 0;
+let wrongQueue = [], feedbackTimer;
 
-ranges.forEach((r, i) => {
+ranges.forEach(([low, high], i) => {
   const label = document.createElement("label");
-
-  label.innerHTML = `
-    <input type="checkbox" class="range" ${i < 3 ? "checked" : ""}>
-    ${r[0]}-${r[1]}
-  `;
-
+  label.innerHTML = `<input type="checkbox" class="range" ${i < 3 ? "checked" : ""}> ${low}-${high}`;
   rangesDiv.appendChild(label);
 });
 
-const rangeSummary = document.getElementById("rangeSummary");
-
 function updateRangeSummary() {
-  const selectedCount = document.querySelectorAll(".range:checked").length;
-  rangeSummary.textContent = selectedCount
-    ? `เลือกแล้ว ${selectedCount} ชุด`
-    : "เลือกอย่างน้อย 1 ชุด";
+  const n = document.querySelectorAll(".range:checked").length;
+  rangeSummary.textContent = n ? `เลือกแล้ว ${n} ชุด` : "เลือกอย่างน้อย 1 ชุด";
 }
-
 rangesDiv.addEventListener("change", updateRangeSummary);
 updateRangeSummary();
 
-let a, b;
-let total = 0;
-let correct = 0;
-let streak = 0;
-let totalTime = 0;
-let startTime = 0;
-let wrongQueue = [];
-let feedbackTimer = null;
-let active = false;
-let waiting = false;
-
-const answer = document.getElementById("answer");
-const feedback = document.getElementById("feedback");
-
-// Division Facts Display
-
-const divisionFacts = document.createElement("div");
-divisionFacts.id = "divisionFacts";
-divisionFacts.innerHTML = "";
-
-document.getElementById("feedback").insertAdjacentElement(
-  "afterend",
-  divisionFacts
-);
-
-function rand(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+function setMode(next) {
+  mode = next;
+  active = false;
+  document.querySelectorAll(".mode-card").forEach(card => card.classList.toggle("active", card.dataset.mode === mode));
+  document.getElementById("multiplySettings").classList.toggle("hidden", mode !== "multiply");
+  document.getElementById("advancedSettings").classList.toggle("hidden", mode === "multiply");
+  factorAnswers.classList.toggle("hidden", mode !== "factors");
+  estimateOptions.classList.toggle("hidden", mode !== "estimate");
+  answer.classList.toggle("hidden", mode !== "multiply");
+  document.getElementById("numpad").classList.toggle("hidden", mode === "estimate");
+  document.querySelector(".answer-panel .keypad-hint").textContent = mode === "factors"
+    ? "แตะช่องเพื่อเลือก แล้วใส่เลขด้วยแป้นด้านล่าง"
+    : mode === "estimate" ? "เลือกคำตอบที่ใกล้ที่สุด" : "แตะตัวเลข แล้วกด ↵ เพื่อส่งคำตอบ";
+  question.innerHTML = '<span class="question-ready-en">Ready?</span><span class="question-ready-th">เริ่มฝึกเมื่อพร้อม</span>';
+  feedback.textContent = "";
+  startBtn.textContent = "เริ่มฝึก";
+  updateStats();
 }
+document.querySelectorAll(".mode-card").forEach(card => card.addEventListener("click", () => setMode(card.dataset.mode)));
 
-function getSelectedRanges() {
-  const selected = [];
-
-  document.querySelectorAll(".range").forEach((c, i) => {
-    if (c.checked) selected.push(ranges[i]);
-  });
-
-  return selected;
-}
-
-function nextQuestion() {
-
-  if (!active) return;
-
-  waiting = false;
-
-  if (wrongQueue.length > 0 && Math.random() < 0.3) {
-
-    const q = wrongQueue.shift();
-    a = q.a;
-    b = q.b;
-
+function setQuestion() {
+  if (wrongQueue.length && Math.random() < .3) ({ a, b } = wrongQueue.shift());
+  else if (mode === "multiply") {
+    const selected = [...document.querySelectorAll(".range")].flatMap((el, i) => el.checked ? [ranges[i]] : []);
+    if (!selected.length) { active = false; question.textContent = "เลือกชุดเลขก่อนเริ่มฝึก"; return; }
+    const [lo, hi] = selected[rand(0, selected.length - 1)];
+    let min = Number(document.getElementById("minMultiplier").value), max = Number(document.getElementById("maxMultiplier").value);
+    if (!Number.isInteger(min) || !Number.isInteger(max) || min < 1 || max < 1) { active = false; question.textContent = "เช็กช่วงตัวคูณอีกครั้ง"; return; }
+    if (min > max) [min, max] = [max, min];
+    a = rand(lo, hi); b = rand(min, max); if (Math.random() < .5) [a, b] = [b, a];
+  } else if (mode === "factors") {
+    const level = document.getElementById("challengeLevel").value;
+    const lo = level === "easy" ? 2 : level === "medium" ? 4 : 10;
+    const hi = level === "easy" ? 12 : level === "medium" ? 20 : 35;
+    a = rand(lo, hi); b = rand(lo, hi);
   } else {
-
-    const selected = getSelectedRanges();
-
-    if (selected.length === 0) {
-      active = false;
-      document.getElementById("question").textContent =
-        "เลือกชุดเลขก่อนเริ่มฝึก";
-      document.getElementById("startBtn").textContent = "เริ่มฝึก";
-      return;
-    }
-
-    const r = selected[rand(0, selected.length - 1)];
-
-    let big = rand(r[0], r[1]);
-
-    let min = Number(
-      document.getElementById("minMultiplier").value
-    );
-
-    let max = Number(
-      document.getElementById("maxMultiplier").value
-    );
-
-    if (!Number.isInteger(min) || !Number.isInteger(max) ||
-        min < 1 || max < 1) {
-      active = false;
-      document.getElementById("question").textContent =
-        "เช็กช่วงตัวคูณอีกครั้ง";
-      document.getElementById("startBtn").textContent = "เริ่มฝึก";
-      return;
-    }
-
-    if (min > max) {
-      [min, max] = [max, min];
-    }
-
-    let small = rand(min, max);
-
-    if (Math.random() < 0.5) {
-      a = big;
-      b = small;
-    } else {
-      a = small;
-      b = big;
-    }
+    const level = document.getElementById("challengeLevel").value;
+    a = rand(level === "hard" ? 100 : 20, level === "easy" ? 49 : level === "medium" ? 99 : 999);
+    b = rand(level === "easy" ? 3 : 10, level === "easy" ? 9 : 99);
   }
-
-  document.getElementById("question").textContent =
-    `${a} × ${b}`;
-
-  answer.value = "";
-  answer.focus();
-
+  if (mode === "factors") {
+    question.textContent = `${a * b}`;
+    factorValues = ["", ""]; activeSlot = 0; updateFactorSlots();
+  } else {
+    question.textContent = `${a} × ${b}`;
+    answer.value = "";
+  }
+  if (mode === "estimate") renderEstimateOptions();
   startTime = performance.now();
 }
 
-function updateStats() {
-
-  const acc = total
-    ? Math.round((correct / total) * 100)
-    : 0;
-
-  const avg = correct
-    ? (totalTime / correct).toFixed(2)
-    : "0.00";
-
-  document.getElementById("accuracy").textContent =
-    `Accuracy: ${acc}%`;
-
-  document.getElementById("average").textContent =
-    `Average: ${avg} s`;
-
-  document.getElementById("streak").textContent =
-    `Streak: ${streak}`;
-}
-
-function submitAnswer() {
-
-  if (!active || waiting || !answer.value) return;
-
-  const t = (performance.now() - startTime) / 1000;
-
-  total++;
-
-  const isCorrect = Number(answer.value) === a * b;
-
-  if (isCorrect) {
-
-    correct++;
-    streak++;
-    totalTime += t;
-
-    const result = a * b;
-
-    divisionFacts.innerHTML = `
-      <div>${result} ÷ ${a} = ${b}</div>
-      <div>${result} ÷ ${b} = ${a}</div>
-    `;
-
-    updateStats();
-    nextQuestion();
-
-  } else {
-
-    streak = 0;
-    wrongQueue.push({ a, b });
-
-    feedback.textContent = `❌ Answer: ${a * b}`;
-    feedback.style.color = "#ff5555";
-
-    updateStats();
-
-    waiting = true;
-
-    feedbackTimer = setTimeout(() => {
-      feedback.textContent = "";
-      nextQuestion();
-    }, 1000);
-  }
-}
-
-// Start Training
-
-document.getElementById("startBtn").onclick = () => {
-
-  clearTimeout(feedbackTimer);
-
-  total = 0;
-  correct = 0;
-  streak = 0;
-  totalTime = 0;
-  wrongQueue = [];
-
-  active = true;
-  waiting = false;
-  document.getElementById("startBtn").textContent = "เริ่มใหม่";
-
-  feedback.textContent = "";
-
-  updateStats();
-  nextQuestion();
-};
-
-// Number Pad
-
-document.querySelectorAll(".num-btn").forEach(button => {
-
-  button.addEventListener("click", () => {
-
-    const key = button.dataset.key;
-
-    if (!active || waiting) return;
-
-    if (key === "backspace") {
-      answer.value = answer.value.slice(0, -1);
-    }
-
-    else if (key === "enter") {
-      submitAnswer();
-    }
-
-    else {
-      answer.value += key;
-    }
-
-    answer.focus();
-
+function updateFactorSlots() {
+  document.querySelectorAll(".factor-slot").forEach((slot, i) => {
+    slot.textContent = factorValues[i] || "—";
+    slot.classList.toggle("selected", i === activeSlot);
   });
+}
+document.querySelectorAll(".factor-slot").forEach(slot => slot.addEventListener("click", () => { activeSlot = Number(slot.dataset.slot); updateFactorSlots(); }));
 
+function renderEstimateOptions() {
+  targetEstimate = Math.round((a * b) / 10) * 10;
+  const options = [...new Set([targetEstimate, targetEstimate - 10, targetEstimate + 10])].sort(() => Math.random() - .5);
+  estimateOptions.innerHTML = options.map(value => `<button class="estimate-choice" data-value="${value}">${value}</button>`).join("");
+  estimateOptions.querySelectorAll("button").forEach(button => button.addEventListener("click", () => submitEstimate(Number(button.dataset.value), button)));
+}
+
+function updateStats() {
+  document.getElementById("accuracy").textContent = `Accuracy: ${total ? Math.round(correct / total * 100) : 0}%`;
+  document.getElementById("average").textContent = `Average: ${correct ? (totalTime / correct).toFixed(2) : "0.00"} s`;
+  document.getElementById("streak").textContent = `Streak: ${streak}`;
+}
+function result(isCorrect, seconds, retry = { a, b }) {
+  total++;
+  if (isCorrect) { correct++; streak++; totalTime += seconds; feedback.textContent = "ถูกต้อง ✓"; feedback.style.color = "#62d69a"; }
+  else { streak = 0; wrongQueue.push(retry); feedback.textContent = `ลองอีกครั้ง · คำตอบ ${retry.a} × ${retry.b} = ${retry.a * retry.b}`; feedback.style.color = "#ff8585"; }
+  updateStats(); waiting = true;
+  feedbackTimer = setTimeout(() => { feedback.textContent = ""; waiting = false; if (active) setQuestion(); }, 850);
+}
+function submitAnswer() {
+  if (!active || waiting) return;
+  if (mode === "factors") {
+    if (!factorValues.every(Boolean)) { feedback.textContent = "ใส่ตัวเลขให้ครบทั้งสองช่อง"; return; }
+    const x = Number(factorValues[0]), y = Number(factorValues[1]);
+    result(x * y === a * b, (performance.now() - startTime) / 1000, { a, b });
+  } else if (answer.value) result(Number(answer.value) === a * b, (performance.now() - startTime) / 1000, { a, b });
+}
+function submitEstimate(value, button) {
+  if (!active || waiting) return;
+  estimateOptions.querySelectorAll("button").forEach(el => el.disabled = true);
+  const approxCorrect = value === targetEstimate;
+  button.classList.add(approxCorrect ? "correct" : "incorrect");
+  result(approxCorrect, (performance.now() - startTime) / 1000, { a, b });
+  feedback.textContent = `${approxCorrect ? "ใกล้มาก" : `ค่าที่ใกล้คือ ${targetEstimate}`} · คำตอบจริง ${a * b}`;
+}
+
+startBtn.addEventListener("click", () => {
+  clearTimeout(feedbackTimer); total = 0; correct = 0; streak = 0; totalTime = 0; wrongQueue = [];
+  active = true; waiting = false; startBtn.textContent = "เริ่มใหม่"; feedback.textContent = ""; updateStats(); setQuestion();
 });
+document.querySelectorAll(".num-btn").forEach(button => button.addEventListener("click", () => {
+  if (!active || waiting || mode === "estimate") return;
+  const key = button.dataset.key;
+  if (mode === "factors") {
+    if (key === "enter") return submitAnswer();
+    factorValues[activeSlot] = key === "backspace" ? factorValues[activeSlot].slice(0, -1) : factorValues[activeSlot] + key;
+    updateFactorSlots();
+  } else if (key === "enter") submitAnswer();
+  else if (key === "backspace") answer.value = answer.value.slice(0, -1);
+  else answer.value += key;
+}));
+answer.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); submitAnswer(); } });
 
-// Physical Keyboard
-
-answer.addEventListener("keydown", e => {
-
-  if (e.key === "Enter") {
-    e.preventDefault();
-    submitAnswer();
-  }
-
-});
