@@ -441,6 +441,9 @@ button {
 .answer-heading h2 { margin: 4px 0 0; font-size: 20px; }
 .answer-count { padding: 5px 10px; border-radius: 999px; background: #202c3a; color: var(--muted); font-size: 12px; white-space: nowrap; }
 .answer-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.engine-answer-entry { display: flex; gap: 10px; margin-top: 12px; }
+.engine-answer-entry input { flex: 1; min-width: 0; min-height: 52px; padding: 10px 14px; border: 1px solid #3a4a5c; border-radius: 12px; background: #111923; color: var(--text); font-size: 18px; }
+.answer-feedback { min-height: 24px; margin: 10px 0 0; color: #8ce0b1; font-weight: 700; }
 .answer-chip { min-width: 52px; padding: 8px 10px; border: 1px solid #355344; border-radius: 10px; background: #183427; color: #8ce0b1; font-size: 19px; font-weight: 800; text-align: center; }
 .pair-details { margin-top: 14px; color: var(--muted); font-size: 13px; }
 .pair-details summary { padding: 8px 0; cursor: pointer; }
@@ -451,6 +454,7 @@ button {
   .header-links { width: 100%; }
   .header-links .nav-btn { flex: 1; padding: 10px 8px; font-size: 13px; }
   .primary-action { width: 100%; margin-left: 0; }
+  .engine-answer-entry { flex-direction: column; }
   .engine-section { padding: 15px; }
   .tile-chip { width: 48px; height: 58px; }
 }
