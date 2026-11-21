@@ -459,6 +459,47 @@ button {
   .tile-chip { width: 48px; height: 58px; }
 }
 
+/* A-Math engine: clear three-step visual hierarchy. */
+.engine-page { max-width: 720px; }
+.engine-page > .nav-btn { display: inline-flex; align-items: center; padding: 10px 14px; }
+.engine-header { margin: 18px 0 26px; }
+.engine-header h1 { font-size: clamp(30px, 5vw, 42px); letter-spacing: -.045em; }
+.engine-header .page-intro { max-width: 38em; line-height: 1.7; }
+.engine-controls { padding: 18px 20px; }
+.engine-controls > label { font-size: 16px; }
+.engine-generate-row input { min-height: 52px; border-radius: 12px; font-weight: 700; }
+.primary-action { min-height: 52px; border-radius: 12px; font-size: 16px; box-shadow: 0 6px 16px #1b5eb833; }
+.engine-result { gap: 12px; margin-top: 16px; }
+.engine-section { position: relative; padding: 20px; border-radius: 18px; box-shadow: 0 8px 22px #0002; }
+.engine-section > .eyebrow { display: flex; align-items: center; gap: 8px; }
+.engine-section > .eyebrow::before { display: grid; width: 22px; height: 22px; place-items: center; border-radius: 50%; background: #2b4058; color: #b6d5fa; font-size: 11px; letter-spacing: 0; }
+.step-one > .eyebrow::before { content: "1"; }
+.step-two > .eyebrow::before { content: "2"; }
+.step-three > .answer-heading .eyebrow::before { content: "3"; }
+.tile-list { gap: 11px; margin-top: 16px; }
+.tile-chip { width: 58px; height: 68px; border: 1px solid #c8b98f; border-bottom: 5px solid #a89669; border-radius: 12px; background: linear-gradient(155deg,#fff8df,#e8d9af); color: #273142; font-size: 30px; box-shadow: 0 7px 12px #0002; }
+.equation-card { border-color: #34485e; background: radial-gradient(ellipse at 50% 10%,#253d57,#182330 75%); }
+.equation-pattern { margin: 14px 0 8px; padding: 14px 8px; border: 1px solid #354b63; border-radius: 14px; background: #10192380; font-size: clamp(32px, 8vw, 46px); }
+.helper-text { line-height: 1.6; }
+.answer-heading { align-items: flex-start; }
+.answer-heading h2 { font-size: 22px; }
+.engine-answer-entry { margin-top: 14px; }
+.engine-answer-entry input { min-height: 58px; border-radius: 13px; font-size: 18px; }
+.engine-answer-entry input:focus { border-color: #65a9ff; outline: none; box-shadow: 0 0 0 3px #3987e833; }
+.answer-feedback { min-height: 26px; }
+.answer-chip { min-width: 54px; padding: 9px 12px; border-radius: 11px; }
+.pair-details { border-top: 1px solid var(--line); padding-top: 8px; }
+
+@media (max-width: 600px) {
+  .engine-header { margin: 14px 0 20px; }
+  .engine-controls { padding: 16px; }
+  .engine-section { padding: 16px; }
+  .tile-list { justify-content: space-between; gap: 7px; }
+  .tile-chip { flex: 0 0 48px; width: 48px; height: 58px; }
+  .engine-answer-entry { gap: 8px; }
+  .engine-answer-entry input { width: 100%; }
+}
+
 .mode-picker {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
