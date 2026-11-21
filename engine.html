@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A-Math Tile Engine</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="a-math-icon-512.png">
+</head>
+<body>
+<main class="container engine-page">
+  <a href="index.html" class="nav-btn">← กลับไปหน้าฝึก</a>
+  <header class="engine-header">
+    <p class="eyebrow">A-MATH PRACTICE TOOL</p>
+    <h1>Tile &amp; Equation Engine</h1>
+    <p class="page-intro">กำหนดจำนวนตัวเบี้ย แล้วให้ระบบสุ่มชุดเลข รูปแบบสมการ และเฉลยผลคูณให้ครบ</p>
+  </header>
+
+  <section class="controls engine-controls">
+    <label for="tileCount">จำนวนตัวเบี้ย</label>
+    <div class="engine-generate-row">
+      <input id="tileCount" type="number" min="2" max="9" value="5" inputmode="numeric">
+      <span class="engine-count-note">ตัว · สุ่มเลข 1–9 แบบไม่ซ้ำ</span>
+      <button id="generateBtn" class="primary-action">สร้างชุดฝึก</button>
+    </div>
+    <p id="engineError" class="engine-error" aria-live="polite"></p>
+  </section>
+
+  <section id="engineResult" class="engine-result hidden" aria-live="polite">
+    <div class="engine-section">
+      <p class="eyebrow">YOUR TILES</p>
+      <div id="tileList" class="tile-list"></div>
+    </div>
+    <div class="engine-section equation-card">
+      <p class="eyebrow">EQUATION PATTERN</p>
+      <div id="equationPattern" class="equation-pattern"></div>
+      <p class="helper-text">จับคู่ตัวเบี้ยทีละ 2 ตัวในตำแหน่งคูณ แล้วหาผลคูณที่เป็นไปได้ทั้งหมด</p>
+    </div>
+    <div class="engine-section">
+      <div class="answer-heading">
+        <div><p class="eyebrow">MULTIPLICATION ANSWERS</p><h2>เฉลยผลคูณ</h2></div>
+        <span id="answerCount" class="answer-count"></span>
+      </div>
+      <div id="answerList" class="answer-list"></div>
+      <details class="pair-details">
+        <summary>ดูคู่ตัวเบี้ยที่ได้แต่ละคำตอบ</summary>
+        <div id="pairList" class="pair-list"></div>
+      </details>
+    </div>
+  </section>
+</main>
+<script src="math-engine.js"></script>
+<script>
+  const countInput = document.getElementById("tileCount");
+  const errorBox = document.getElementById("engineError");
+  const resultBox = document.getElementById("engineResult");
+  function generate() {
+    errorBox.textContent = "";
+    try {
+      const set = AMathEngine.createSet(Number(countInput.value));
+      document.getElementById("tileList").innerHTML = set.tiles.map(n => `<span class="tile-chip">${n}</span>`).join("");
+      document.getElementById("equationPattern").textContent = set.pattern;
+      document.getElementById("answerCount").textContent = `${set.answers.length} คำตอบ`;
+      document.getElementById("answerList").innerHTML = set.answers.map(n => `<span class="answer-chip">${n}</span>`).join("");
+      document.getElementById("pairList").innerHTML = set.pairs.map(p => `<span>${p.left} × ${p.right} = <strong>${p.product}</strong></span>`).join("");
+      resultBox.classList.remove("hidden");
+    } catch (error) {
+      resultBox.classList.add("hidden");
+      errorBox.textContent = error.message;
+    }
+  }
+  document.getElementById("generateBtn").addEventListener("click", generate);
+  countInput.addEventListener("keydown", event => { if (event.key === "Enter") generate(); });
+  generate();
+</script>
+</body>
+</html>
