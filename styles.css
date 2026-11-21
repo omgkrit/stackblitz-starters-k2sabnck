@@ -497,6 +497,99 @@ button { min-height: 44px; }
   .engine-page .nav-btn { min-height: 44px; }
 }
 
+.header-links { align-items: center; }
+.theme-toggle {
+  display: inline-grid;
+  width: 46px;
+  min-width: 46px;
+  height: 46px;
+  place-items: center;
+  border: 1px solid #39485a;
+  border-radius: 12px;
+  background: #202c3a;
+  color: var(--text);
+  font-size: 20px;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --page: #f2f5fa;
+  --panel: #ffffff;
+  --panel-raised: #f7f9fc;
+  --line: #d8e0ea;
+  --text: #1c2837;
+  --muted: #5f6e80;
+  --blue: #2878d0;
+  --blue-deep: #1d62b2;
+  --green: #168856;
+}
+
+:root[data-theme="light"] body {
+  background: radial-gradient(ellipse at 50% -18%, #dcecff 0, #f3f6fa 58%);
+  color: var(--text);
+}
+:root[data-theme="light"] h1,
+:root[data-theme="light"] .page-header h1,
+:root[data-theme="light"] .engine-header h1,
+:root[data-theme="light"] .section-heading h2,
+:root[data-theme="light"] .answer-heading h2 { color: #1b2939; }
+:root[data-theme="light"] .page-header { border-color: #1b293915; }
+:root[data-theme="light"] .controls,
+:root[data-theme="light"] .engine-controls,
+:root[data-theme="light"] .engine-section,
+:root[data-theme="light"] .question-panel,
+:root[data-theme="light"] .answer-panel,
+:root[data-theme="light"] .row,
+:root[data-theme="light"] .stats > div {
+  border-color: #d7e0eb;
+  background-color: #fff;
+  box-shadow: 0 8px 22px #203b5a0d;
+}
+:root[data-theme="light"] .question-panel #question,
+:root[data-theme="light"] #question {
+  border-color: #d8e3ef;
+  background: linear-gradient(145deg, #f8fbff, #edf4fb);
+  color: #1c2837;
+}
+:root[data-theme="light"] .controls input,
+:root[data-theme="light"] .controls select,
+:root[data-theme="light"] .table-label input,
+:root[data-theme="light"] #answer,
+:root[data-theme="light"] .engine-generate-row input,
+:root[data-theme="light"] .engine-answer-entry input {
+  border-color: #cbd6e3;
+  background: #fff;
+  color: #1c2837;
+}
+:root[data-theme="light"] #answer::placeholder,
+:root[data-theme="light"] .engine-answer-entry input::placeholder { color: #7c8998; }
+:root[data-theme="light"] #ranges label,
+:root[data-theme="light"] .multiplier-setting,
+:root[data-theme="light"] .mode-card,
+:root[data-theme="light"] .tabs,
+:root[data-theme="light"] .answer-count,
+:root[data-theme="light"] .factor-slot { border-color: #d8e1eb; background: #f7f9fc; color: #26364a; }
+:root[data-theme="light"] .mode-card.active,
+:root[data-theme="light"] .tab-btn.active { background: linear-gradient(145deg, #3987e8, #276dcc); color: white; }
+:root[data-theme="light"] .nav-btn,
+:root[data-theme="light"] .theme-toggle { border-color: #d3deea; background: #fff; color: #25364b; }
+:root[data-theme="light"] .num-btn { border-color: #cbd6e3; border-bottom-color: #b9c6d5; background: linear-gradient(180deg,#fff,#e9eff6); color: #1c2837; }
+:root[data-theme="light"] .delete-btn { border-bottom-color: #8f4548; background: linear-gradient(180deg,#cf6569,#a84249); color: white; }
+:root[data-theme="light"] .enter-btn { border-bottom-color: #147047; background: linear-gradient(180deg,#2ab47a,#19895a); color: white; }
+:root[data-theme="light"] .equation-card { border-color: #d4e1ef; background: linear-gradient(145deg,#eaf4ff,#f8fbff); }
+:root[data-theme="light"] .equation-pattern { border-color: #d2e0ef; background: #fff; color: #1c2837; }
+:root[data-theme="light"] .pair-list span { background: #f2f6fb; color: #26364a; }
+:root[data-theme="light"] .table-label,
+:root[data-theme="light"] .controls label { color: #4b5e73; }
+:root[data-theme="light"] .question-ready-th { color: #68798d; }
+
+@media (max-width: 600px) {
+  .theme-toggle { width: 44px; min-width: 44px; height: 44px; }
+}
+@media (max-width: 760px) {
+  :root[data-theme="light"] .question-panel #question { border-color: transparent; background: transparent; }
+}
+
 /* A-Math engine: clear three-step visual hierarchy. */
 .engine-page { max-width: 720px; }
 .engine-page > .nav-btn { display: inline-flex; align-items: center; padding: 10px 14px; }

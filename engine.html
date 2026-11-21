@@ -10,7 +10,10 @@
 </head>
 <body>
 <main class="container engine-page">
-  <a href="index.html" class="nav-btn">← กลับไปหน้าฝึก</a>
+  <nav class="header-links engine-nav">
+    <a href="index.html" class="nav-btn">← กลับไปหน้าฝึก</a>
+    <button class="theme-toggle" type="button" aria-label="เปลี่ยนเป็นธีมสว่าง" title="ธีมสว่าง">☀️</button>
+  </nav>
   <header class="engine-header">
     <p class="eyebrow">A-MATH PRACTICE TOOL</p>
     <h1>Tile &amp; Equation Engine</h1>
@@ -57,6 +60,7 @@
   </section>
 </main>
 <script src="math-engine.js"></script>
+<script src="theme.js"></script>
 <script>
   const countInput = document.getElementById("tileCount");
   const errorBox = document.getElementById("engineError");
