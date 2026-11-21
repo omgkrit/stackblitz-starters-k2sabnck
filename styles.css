@@ -459,33 +459,6 @@ button {
   .tile-chip { width: 48px; height: 58px; }
 }
 
-.ui-icon, .theme-icon {
-  display: block;
-  width: 18px;
-  height: 18px;
-  flex: 0 0 18px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.theme-icon { width: 20px; height: 20px; flex-basis: 20px; }
-.key-icon { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; }
-.nav-btn, .tab-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-.nav-btn { min-height: 44px; }
-.brand-mark { display: inline-grid; width: 34px; height: 34px; margin-right: 5px; place-items: center; border: 1px solid #5b9df066; border-radius: 11px; background: #3987e822; color: #78b7ff; font-size: 24px; vertical-align: -3px; }
-.num-btn { display: grid; place-items: center; }
-.theme-toggle { padding: 0; }
-:root[data-theme="light"] .brand-mark { border-color: #2878d044; background: #2878d018; color: #276dcc; }
-:root[data-theme="light"] .ui-icon, :root[data-theme="light"] .theme-icon { color: inherit; }
-
-@media (max-width: 600px) {
-  .page-header .nav-btn { gap: 6px; }
-  .brand-mark { width: 30px; height: 30px; font-size: 21px; border-radius: 9px; }
-  .key-icon { width: 26px; height: 26px; }
-}
-
 /* Shared visual system across trainer, tables, and A-Math engine. */
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
 body {
